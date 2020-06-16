@@ -1,0 +1,14 @@
+/person-service/.idea/
+/person-model/.idea/
+/library-service/.idea/
+/library-model/.idea/
+/.idea/
+/target/
+/person-service/target/
+/person-model/target/
+/library-service/target/
+/library-model/target/
+/library-model/library-model.iml
+/library-service/library-service.iml
+/person-model/person-model.iml
+/person-service/person-service.iml
