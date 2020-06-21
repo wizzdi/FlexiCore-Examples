@@ -4,6 +4,7 @@ import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.data.jsoncontainers.PaginationResponse;
 import com.flexicore.example.library.model.Author;
 import com.flexicore.examples.data.AuthorRepository;
+import com.flexicore.examples.interfaces.IPersonService;
 import com.flexicore.examples.request.AuthorCreate;
 import com.flexicore.examples.request.AuthorFilter;
 import com.flexicore.examples.request.AuthorUpdate;
@@ -30,9 +31,9 @@ public class AuthorService implements ServicePlugin {
 	@Autowired
 	private Logger logger;
 
-	/*@PluginInfo(version = 1)
+	@PluginInfo(version = 1)
 	@Autowired
-	private PersonService personService;*/
+	private IPersonService personService;
 
 	public Author createAuthor(AuthorCreate authorCreate,
 			SecurityContext securityContext) {
@@ -49,7 +50,7 @@ public class AuthorService implements ServicePlugin {
 	}
 
 	public boolean updateAuthorNoMerge(Author author, AuthorCreate authorCreate) {
-		boolean update =false;
+		boolean update =personService.updatePersonNoMerge(author,authorCreate);
 
 		return update;
 	}
