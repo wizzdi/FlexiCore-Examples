@@ -8,18 +8,23 @@ import com.flexicore.examples.interfaces.IPersonService;
 import com.flexicore.examples.request.PersonCreate;
 import com.flexicore.examples.request.PersonFilter;
 import com.flexicore.examples.request.PersonUpdate;
+import com.flexicore.interfaces.FlexiCoreService;
+import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
 import com.flexicore.security.SecurityContext;
 
 import java.util.List;
 import java.util.logging.Logger;
+
 import org.pf4j.Extension;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PluginInfo(version = 1)
-@Extension
 @Component
+@Extension
+@Primary
 public class PersonService implements IPersonService {
 
 	@PluginInfo(version = 1)

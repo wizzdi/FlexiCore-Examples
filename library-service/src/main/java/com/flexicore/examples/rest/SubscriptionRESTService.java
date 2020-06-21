@@ -53,7 +53,7 @@ public class SubscriptionRESTService implements RestServicePlugin {
 	@PUT
 	@Operation(summary = "updateSubscription", description = "Updates Subscription")
 	@Path("updateSubscription")
-	public void updateSubscription(
+	public Subscription updateSubscription(
 			@HeaderParam("authenticationKey") String authenticationKey,
 			SubscriptionUpdate subscriptionUpdate,
 			@Context SecurityContext securityContext) {
@@ -66,7 +66,7 @@ public class SubscriptionRESTService implements RestServicePlugin {
 		}
 		subscriptionUpdate.setSubscription(subscription);
 		service.validate(subscriptionUpdate, securityContext);
-		service.updateSubscription(subscriptionUpdate, securityContext);
+		return service.updateSubscription(subscriptionUpdate, securityContext);
 	}
 
 	@POST

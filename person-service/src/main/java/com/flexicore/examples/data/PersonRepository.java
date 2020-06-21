@@ -2,7 +2,6 @@ package com.flexicore.examples.data;
 
 import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.example.person.Person;
-import com.flexicore.examples.interfaces.IPersonRepository;
 import com.flexicore.examples.request.PersonFilter;
 import com.flexicore.interfaces.AbstractRepositoryPlugin;
 import com.flexicore.model.QueryInformationHolder;
@@ -17,10 +16,12 @@ import java.util.List;
 import org.pf4j.Extension;
 import org.springframework.stereotype.Component;
 
+import static com.flexicore.examples.interfaces.IPersonRepository.addPersonPredicate;
+
 @PluginInfo(version = 1)
 @Extension
 @Component
-public class PersonRepository extends AbstractRepositoryPlugin implements IPersonRepository {
+public class PersonRepository extends AbstractRepositoryPlugin  {
 
 	public List<Person> listAllPersons(PersonFilter filtering,
 			SecurityContext securityContext) {
@@ -28,7 +29,7 @@ public class PersonRepository extends AbstractRepositoryPlugin implements IPerso
 		CriteriaQuery<Person> q = cb.createQuery(Person.class);
 		Root<Person> r = q.from(Person.class);
 		List<Predicate> preds = new ArrayList<>();
-		IPersonRepository.addPersonPredicate(filtering, cb, r, preds);
+		addPersonPredicate(filtering, cb, r, preds);
 		QueryInformationHolder<Person> queryInformationHolder = new QueryInformationHolder<>(filtering, Person.class, securityContext);
 		return getAllFiltered(queryInformationHolder, preds, cb, q, r);
 	}
@@ -39,9 +40,11 @@ public class PersonRepository extends AbstractRepositoryPlugin implements IPerso
 		CriteriaQuery<Long> q = cb.createQuery(Long.class);
 		Root<Person> r = q.from(Person.class);
 		List<Predicate> preds = new ArrayList<>();
-		IPersonRepository.addPersonPredicate(filtering, cb, r, preds);
+		addPersonPredicate(filtering, cb, r, preds);
 		QueryInformationHolder<Person> queryInformationHolder = new QueryInformationHolder<>(filtering, Person.class, securityContext);
 		return countAllFiltered(queryInformationHolder, preds, cb, q, r);
 	}
+
+
 
 }

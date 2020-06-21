@@ -40,9 +40,7 @@ public class BookService implements ServicePlugin {
 
 	public Book createBookNoMerge(BookCreate bookCreate,
 			SecurityContext securityContext) {
-		Book book = Book.s().CreateUnchecked(bookCreate.getName(),
-				securityContext);
-		book.Init();
+		Book book = new Book(bookCreate.getName(),securityContext);
 		updateBookNoMerge(book, bookCreate);
 		return book;
 	}

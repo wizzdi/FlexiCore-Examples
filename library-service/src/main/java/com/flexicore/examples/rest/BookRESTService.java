@@ -53,7 +53,7 @@ public class BookRESTService implements RestServicePlugin {
 	@PUT
 	@Operation(summary = "updateBook", description = "Updates Book")
 	@Path("updateBook")
-	public void updateBook(
+	public Book updateBook(
 			@HeaderParam("authenticationKey") String authenticationKey,
 			BookUpdate bookUpdate, @Context SecurityContext securityContext) {
 		String bookId = bookUpdate.getId();
@@ -64,7 +64,7 @@ public class BookRESTService implements RestServicePlugin {
 		}
 		bookUpdate.setBook(book);
 		service.validate(bookUpdate, securityContext);
-		service.updateBook(bookUpdate, securityContext);
+		return service.updateBook(bookUpdate, securityContext);
 	}
 
 	@POST

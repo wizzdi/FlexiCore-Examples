@@ -6,14 +6,13 @@
     <artifactId>person-service</artifactId>
     <version>1.0.0</version>
     <properties>
-        <flexicore-api.version>4.0.1-spring</flexicore-api.version>
+        <flexicore-api.version>4.0.7</flexicore-api.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <version.compiler.plugin>3.3</version.compiler.plugin>
-        <version.jackson>2.9.5</version.jackson>
-        <version.eclipselink>2.7.1</version.eclipselink>
+        <version.eclipselink>2.7.7</version.eclipselink>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pf4j-spring.version>0.6.0-SNAPSHOT</pf4j-spring.version>
+        <pf4j-spring.version>0.6.0</pf4j-spring.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -45,19 +44,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${version.jackson}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa</artifactId>
             <version>${version.eclipselink}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.flexicore</groupId>
+            <groupId>com.wizzdi</groupId>
             <artifactId>flexicore-api</artifactId>
             <version>${flexicore-api.version}</version>
             <scope>provided</scope>
@@ -73,6 +66,45 @@
             <artifactId>pf4j-spring</artifactId>
             <version>${pf4j-spring.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.wizzdi</groupId>
+            <artifactId>FlexiCore</artifactId>
+            <version>${flexicore-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.wizzdi</groupId>
+            <artifactId>flexicore-entities-provider</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -116,7 +148,6 @@
                                         <Plugin-Id>${artifactId}</Plugin-Id>
                                         <Plugin-Version>${version}</Plugin-Version>
                                         <!--suppress UnresolvedMavenProperty -->
-                                        <Plugin-Dependencies/>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>

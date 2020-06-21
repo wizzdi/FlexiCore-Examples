@@ -17,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.pf4j.Extension;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,13 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Tag(name = "Author")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Extension
 @Component
+@Extension
+@Primary
 public class AuthorRESTService implements RestServicePlugin {
 
 	@PluginInfo(version = 1)
 	@Autowired
-	private AuthorService service;
+	private AuthorService authorService;
 
 	@POST
 	@Path("createAuthor")
@@ -44,8 +46,8 @@ public class AuthorRESTService implements RestServicePlugin {
 	public Author createAuthor(
 			@HeaderParam("authenticationKey") String authenticationKey,
 			AuthorCreate authorCreate, @Context SecurityContext securityContext) {
-		service.validate(authorCreate, securityContext);
-		return service.createAuthor(authorCreate, securityContext);
+		authorService.validate(authorCreate, securityContext);
+		return authorService.createAuthor(authorCreate, securityContext);
 	}
 
 	@PUT
@@ -55,14 +57,14 @@ public class AuthorRESTService implements RestServicePlugin {
 			@HeaderParam("authenticationKey") String authenticationKey,
 			AuthorUpdate authorUpdate, @Context SecurityContext securityContext) {
 		String authorId = authorUpdate.getId();
-		Author author = service.getByIdOrNull(authorId, Author.class, null,
+		Author author = authorService.getByIdOrNull(authorId, Author.class, null,
 				securityContext);
 		if (author == null) {
 			throw new BadRequestException("No Author with id " + authorId);
 		}
 		authorUpdate.setAuthor(author);
-		service.validate(authorUpdate, securityContext);
-		service.updateAuthor(authorUpdate, securityContext);
+		authorService.validate(authorUpdate, securityContext);
+		authorService.updateAuthor(authorUpdate, securityContext);
 	}
 
 	@POST
@@ -71,7 +73,7 @@ public class AuthorRESTService implements RestServicePlugin {
 	public PaginationResponse<Author> getAllAuthors(
 			@HeaderParam("authenticationKey") String authenticationKey,
 			AuthorFilter authorFilter, @Context SecurityContext securityContext) {
-		service.validate(authorFilter, securityContext);
-		return service.getAllAuthors(authorFilter, securityContext);
+		authorService.validate(authorFilter, securityContext);
+		return authorService.getAllAuthors(authorFilter, securityContext);
 	}
 }

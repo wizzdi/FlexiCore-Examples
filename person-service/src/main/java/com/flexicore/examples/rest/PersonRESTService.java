@@ -10,6 +10,7 @@ import com.flexicore.examples.request.PersonFilter;
 import com.flexicore.examples.request.PersonUpdate;
 import com.flexicore.examples.service.PersonService;
 
+import com.flexicore.interfaces.RESTService;
 import com.flexicore.interfaces.RestServicePlugin;
 import com.flexicore.security.SecurityContext;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.pf4j.Extension;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,8 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Tag(name = "Person")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Extension
 @Component
+@Extension
+@Primary
 public class PersonRESTService implements RestServicePlugin {
 
 	@PluginInfo(version = 1)
@@ -53,7 +56,7 @@ public class PersonRESTService implements RestServicePlugin {
 	@PUT
 	@Operation(summary = "updatePerson", description = "Updates Person")
 	@Path("updatePerson")
-	public void updatePerson(
+	public Person updatePerson(
 			@HeaderParam("authenticationKey") String authenticationKey,
 			PersonUpdate personUpdate, @Context SecurityContext securityContext) {
 		String personId = personUpdate.getId();
@@ -63,7 +66,7 @@ public class PersonRESTService implements RestServicePlugin {
 			throw new BadRequestException("No Person with id " + personId);
 		}
 		personUpdate.setPerson(person);
-		service.updatePerson(personUpdate, securityContext);
+		return service.updatePerson(personUpdate, securityContext);
 	}
 
 	@POST

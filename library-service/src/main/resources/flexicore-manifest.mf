@@ -1,3 +1,2 @@
 uuid=${project.groupId}.${project.artifactId}
 version=${project.version}
-requires=com.flexicore.examples.interfaces.IPersonService,com.flexicore.examples.interfaces.IPersonRepository

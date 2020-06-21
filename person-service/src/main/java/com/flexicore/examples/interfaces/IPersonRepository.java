@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface IPersonRepository {
 
-	static <T extends Person> void addPersonPredicate(PersonFilter filtering,
-			CriteriaBuilder cb, Root<T> r, List<Predicate> preds) {
 
-	}
+    static <T extends Person> void addPersonPredicate(PersonFilter filtering,
+                                                      CriteriaBuilder cb, Root<T> r, List<Predicate> preds) {
+
+    }
 }

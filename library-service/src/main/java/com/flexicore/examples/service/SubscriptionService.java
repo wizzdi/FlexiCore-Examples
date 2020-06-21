@@ -45,9 +45,7 @@ public class SubscriptionService implements ServicePlugin {
 	public Subscription createSubscriptionNoMerge(
 			SubscriptionCreate subscriptionCreate,
 			SecurityContext securityContext) {
-		Subscription subscription = Subscription.s().CreateUnchecked(
-				"subscription", securityContext);
-		subscription.Init();
+		Subscription subscription = new Subscription("subscription",securityContext);
 		updateSubscriptionNoMerge(subscription, subscriptionCreate);
 		return subscription;
 	}
@@ -160,7 +158,7 @@ public class SubscriptionService implements ServicePlugin {
 		String bookId = subscriptionCreate.getBookId();
 		Book book = bookId != null ? getByIdOrNull(bookId, Book.class, null,
 				securityContext) : null;
-		if (book == null) {
+		if (bookId!=null&&book == null) {
 			throw new BadRequestException("No Book with id " + bookId);
 		}
 		subscriptionCreate.setBook(book);
@@ -168,7 +166,7 @@ public class SubscriptionService implements ServicePlugin {
 		String personId = subscriptionCreate.getPersonId();
 		Person person = personId != null ? getByIdOrNull(personId,
 				Person.class, null, securityContext) : null;
-		if (person == null) {
+		if (personId!=null&&person == null) {
 			throw new BadRequestException("No Person with id " + personId);
 		}
 		subscriptionCreate.setPerson(person);
