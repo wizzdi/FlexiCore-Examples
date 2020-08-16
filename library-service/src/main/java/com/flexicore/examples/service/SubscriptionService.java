@@ -30,8 +30,6 @@ public class SubscriptionService implements ServicePlugin {
 	@PluginInfo(version = 1)
 	@Autowired
 	private SubscriptionRepository repository;
-	@Autowired
-	private Logger logger;
 
 	public Subscription createSubscription(
 			SubscriptionCreate subscriptionCreate,

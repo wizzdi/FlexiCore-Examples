@@ -2,22 +2,19 @@ package com.flexicore.examples.data;
 
 import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.example.library.model.Author;
-import com.flexicore.example.library.model.Author_;
-import com.flexicore.example.library.model.Author;
-import com.flexicore.example.library.model.Author_;
-import com.flexicore.examples.interfaces.IPersonRepository;
 import com.flexicore.examples.request.AuthorFilter;
 import com.flexicore.interfaces.AbstractRepositoryPlugin;
 import com.flexicore.model.QueryInformationHolder;
 import com.flexicore.security.SecurityContext;
-
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.pf4j.Extension;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @PluginInfo(version = 1)
 @Extension
@@ -38,7 +35,7 @@ public class AuthorRepository extends AbstractRepositoryPlugin {
 
 	private void addAuthorPredicate(AuthorFilter filtering, CriteriaBuilder cb,
 			Root<Author> r, List<Predicate> preds) {
-		IPersonRepository.addPersonPredicate(filtering, cb, r, preds);
+		PersonRepository.addPersonPredicate(filtering, cb, r, preds);
 
 	}
 

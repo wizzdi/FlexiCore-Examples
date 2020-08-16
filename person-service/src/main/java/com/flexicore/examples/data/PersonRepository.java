@@ -16,7 +16,6 @@ import java.util.List;
 import org.pf4j.Extension;
 import org.springframework.stereotype.Component;
 
-import static com.flexicore.examples.interfaces.IPersonRepository.addPersonPredicate;
 
 @PluginInfo(version = 1)
 @Extension
@@ -43,6 +42,10 @@ public class PersonRepository extends AbstractRepositoryPlugin  {
 		addPersonPredicate(filtering, cb, r, preds);
 		QueryInformationHolder<Person> queryInformationHolder = new QueryInformationHolder<>(filtering, Person.class, securityContext);
 		return countAllFiltered(queryInformationHolder, preds, cb, q, r);
+	}
+
+	static <T extends Person> void addPersonPredicate(PersonFilter filtering, CriteriaBuilder cb, Root<T> r, List<Predicate> preds) {
+
 	}
 
 

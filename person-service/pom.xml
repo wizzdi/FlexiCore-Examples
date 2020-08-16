@@ -6,7 +6,7 @@
     <artifactId>person-service</artifactId>
     <version>1.0.0</version>
     <properties>
-        <flexicore-api.version>4.0.7</flexicore-api.version>
+        <flexicore-api.version>4.0.14</flexicore-api.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <version.compiler.plugin>3.3</version.compiler.plugin>
         <version.eclipselink>2.7.7</version.eclipselink>
@@ -109,10 +109,6 @@
     </dependencies>
     <build>
         <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>

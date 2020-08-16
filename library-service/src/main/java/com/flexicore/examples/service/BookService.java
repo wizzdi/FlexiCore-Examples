@@ -28,8 +28,6 @@ public class BookService implements ServicePlugin {
 	@PluginInfo(version = 1)
 	@Autowired
 	private BookRepository repository;
-	@Autowired
-	private Logger logger;
 
 	public Book createBook(BookCreate bookCreate,
 			SecurityContext securityContext) {

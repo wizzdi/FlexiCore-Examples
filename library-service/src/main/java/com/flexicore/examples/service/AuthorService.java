@@ -4,7 +4,6 @@ import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.data.jsoncontainers.PaginationResponse;
 import com.flexicore.example.library.model.Author;
 import com.flexicore.examples.data.AuthorRepository;
-import com.flexicore.examples.interfaces.IPersonService;
 import com.flexicore.examples.request.AuthorCreate;
 import com.flexicore.examples.request.AuthorFilter;
 import com.flexicore.examples.request.AuthorUpdate;
@@ -28,12 +27,10 @@ public class AuthorService implements ServicePlugin {
 	@PluginInfo(version = 1)
 	@Autowired
 	private AuthorRepository repository;
-	@Autowired
-	private Logger logger;
 
 	@PluginInfo(version = 1)
 	@Autowired
-	private IPersonService personService;
+	private PersonService personService;
 
 	public Author createAuthor(AuthorCreate authorCreate,
 			SecurityContext securityContext) {

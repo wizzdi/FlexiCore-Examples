@@ -4,34 +4,29 @@ import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.data.jsoncontainers.PaginationResponse;
 import com.flexicore.example.person.Person;
 import com.flexicore.examples.data.PersonRepository;
-import com.flexicore.examples.interfaces.IPersonService;
 import com.flexicore.examples.request.PersonCreate;
 import com.flexicore.examples.request.PersonFilter;
 import com.flexicore.examples.request.PersonUpdate;
-import com.flexicore.interfaces.FlexiCoreService;
 import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
 import com.flexicore.security.SecurityContext;
-
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.pf4j.Extension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @PluginInfo(version = 1)
 @Component
 @Extension
 @Primary
-public class PersonService implements IPersonService {
+public class PersonService implements ServicePlugin {
 
 	@PluginInfo(version = 1)
 	@Autowired
 	private PersonRepository repository;
-	@Autowired
-	private Logger logger;
+
 
 	public Person createPerson(PersonCreate personCreate,
 			SecurityContext securityContext) {
@@ -40,7 +35,6 @@ public class PersonService implements IPersonService {
 		return person;
 	}
 
-	@Override
 	public Person createPersonNoMerge(PersonCreate personCreate,
 			SecurityContext securityContext) {
 		Person person = new Person(personCreate.getFirstName(), securityContext);
@@ -48,7 +42,6 @@ public class PersonService implements IPersonService {
 		return person;
 	}
 
-	@Override
 	public boolean updatePersonNoMerge(Person person, PersonCreate personCreate) {
 		boolean update = false;
 		if (personCreate.getFirstName() != null
