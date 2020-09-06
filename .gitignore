@@ -12,3 +12,9 @@
 /library-service/library-service.iml
 /person-model/person-model.iml
 /person-service/person-service.iml
+/hello-world-service/target/
+/hello-world-service/hello-world-service.iml
+/hello-world-service/.idea/
+/hello-world-rest/hello-world-rest.iml
+/hello-world-rest/target/
+/hello-world-rest/.idea/

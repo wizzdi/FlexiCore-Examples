@@ -1,6 +1,8 @@
 package com.flexicore.examples.request;
 
-public class PersonCreate {
+import com.flexicore.request.BaseclassCreate;
+
+public class PersonCreate extends BaseclassCreate {
 	private String firstName;
 	private String lastName;
 
@@ -20,5 +22,10 @@ public class PersonCreate {
 	public <T extends PersonCreate> T setLastName(String lastName) {
 		this.lastName = lastName;
 		return (T) this;
+	}
+
+	@Override
+	public boolean supportingDynamic() {
+		return super.supportingDynamic();
 	}
 }

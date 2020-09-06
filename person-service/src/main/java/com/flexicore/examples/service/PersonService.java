@@ -10,6 +10,7 @@ import com.flexicore.examples.request.PersonUpdate;
 import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
 import com.flexicore.security.SecurityContext;
+import com.flexicore.service.BaseclassNewService;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -27,6 +28,9 @@ public class PersonService implements ServicePlugin {
 	@Autowired
 	private PersonRepository repository;
 
+	@Autowired
+	private BaseclassNewService baseclassNewService;
+
 
 	public Person createPerson(PersonCreate personCreate,
 			SecurityContext securityContext) {
@@ -43,7 +47,7 @@ public class PersonService implements ServicePlugin {
 	}
 
 	public boolean updatePersonNoMerge(Person person, PersonCreate personCreate) {
-		boolean update = false;
+		boolean update = baseclassNewService.updateBaseclassNoMerge(personCreate,person);
 		if (personCreate.getFirstName() != null
 				&& !personCreate.getFirstName().equals(person.getFirstName())) {
 			person.setFirstName(personCreate.getFirstName());
