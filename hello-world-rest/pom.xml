@@ -16,6 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <pf4j-spring.version>0.6.0</pf4j-spring.version>
         <hello-world-service.version>1.0.0</hello-world-service.version>
+        <FlexiCore.version>4.0.33</FlexiCore.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -100,7 +101,7 @@
         <dependency>
             <groupId>com.wizzdi</groupId>
             <artifactId>FlexiCore</artifactId>
-            <version>${flexicore-api.version}</version>
+            <version>${FlexiCore.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
