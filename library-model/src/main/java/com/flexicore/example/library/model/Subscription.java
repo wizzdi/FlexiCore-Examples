@@ -4,13 +4,16 @@ import com.flexicore.example.person.Person;
 import com.flexicore.model.Baseclass;
 import com.flexicore.security.SecurityContext;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.time.OffsetDateTime;
 
 @Entity
 public class Subscription extends Baseclass {
+    @Column(columnDefinition = "timestamp with time zone")
     private OffsetDateTime startTime;
+    @Column(columnDefinition = "timestamp with time zone")
     private OffsetDateTime endTime;
 
     public Subscription() {
@@ -45,6 +48,7 @@ public class Subscription extends Baseclass {
         return (T) this;
     }
 
+    @Column(columnDefinition = "timestamp with time zone")
     public OffsetDateTime getStartTime() {
         return startTime;
     }
@@ -54,6 +58,7 @@ public class Subscription extends Baseclass {
         return (T) this;
     }
 
+    @Column(columnDefinition = "timestamp with time zone")
     public OffsetDateTime getEndTime() {
         return endTime;
     }
