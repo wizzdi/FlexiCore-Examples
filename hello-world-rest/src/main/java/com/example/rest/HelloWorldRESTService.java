@@ -1,9 +1,8 @@
 package com.example.rest;
 
-import com.example.HelloWorldService;
+import com.example.service.HelloWorldService;
 import com.flexicore.annotations.OperationsInside;
 import com.flexicore.annotations.UnProtectedREST;
-import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.interfaces.RestServicePlugin;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.pf4j.Extension;
