@@ -1,6 +1,6 @@
-package com.example.rest;
+package org.example.rest;
 
-import com.example.service.HelloWorldService;
+import org.example.service.HelloWorldService;
 import com.flexicore.annotations.OperationsInside;
 import com.flexicore.annotations.UnProtectedREST;
 import com.flexicore.interfaces.RestServicePlugin;
