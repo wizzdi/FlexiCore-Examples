@@ -1,4 +1,4 @@
-package com.example;
+package com.example.service;
 
 import com.flexicore.interfaces.ServicePlugin;
 import org.pf4j.Extension;
