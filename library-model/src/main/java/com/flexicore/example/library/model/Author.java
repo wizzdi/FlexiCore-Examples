@@ -2,7 +2,6 @@ package com.flexicore.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.example.person.Person;
-import com.flexicore.security.SecurityContextBase;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -12,12 +11,6 @@ import java.util.List;
 @Entity
 public class Author extends Person {
 
-    public Author(String name, SecurityContextBase securityContextBase) {
-        super(name, securityContextBase);
-    }
-
-    public Author() {
-    }
 
     @OneToMany(targetEntity = Book.class,mappedBy = "author")
     @JsonIgnore

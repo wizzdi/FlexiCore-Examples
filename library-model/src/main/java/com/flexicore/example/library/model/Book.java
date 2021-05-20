@@ -2,20 +2,15 @@ package com.flexicore.example.library.model;
 
 import com.flexicore.example.person.Person;
 import com.flexicore.model.Baseclass;
+import com.flexicore.model.SecuredBasic;
 import com.flexicore.security.SecurityContextBase;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Book extends Baseclass {
+public class Book extends SecuredBasic {
 
-    public Book() {
-    }
-
-    public Book(String name, SecurityContextBase securityContextBase) {
-        super(name, securityContextBase);
-    }
 
     @ManyToOne(targetEntity = Author.class)
     private Author author;

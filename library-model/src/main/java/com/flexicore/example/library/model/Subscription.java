@@ -2,6 +2,7 @@ package com.flexicore.example.library.model;
 
 import com.flexicore.example.person.Person;
 import com.flexicore.model.Baseclass;
+import com.flexicore.model.SecuredBasic;
 import com.flexicore.security.SecurityContextBase;
 
 import javax.persistence.Column;
@@ -10,18 +11,12 @@ import javax.persistence.ManyToOne;
 import java.time.OffsetDateTime;
 
 @Entity
-public class Subscription extends Baseclass {
+public class Subscription extends SecuredBasic {
     @Column(columnDefinition = "timestamp with time zone")
     private OffsetDateTime startTime;
     @Column(columnDefinition = "timestamp with time zone")
     private OffsetDateTime endTime;
 
-    public Subscription() {
-    }
-
-    public Subscription(String name, SecurityContextBase securityContextBase) {
-        super(name, securityContextBase);
-    }
 
     @ManyToOne(targetEntity = Book.class)
     private Book book;
