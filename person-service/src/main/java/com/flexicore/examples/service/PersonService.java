@@ -9,7 +9,7 @@ import com.flexicore.examples.request.PersonFilter;
 import com.flexicore.examples.request.PersonUpdate;
 import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
-import com.flexicore.security.SecurityContext;
+import com.flexicore.security.SecurityContextBase;
 import com.flexicore.service.BaseclassNewService;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@PluginInfo(version = 1)
+
 @Component
 @Extension
 @Primary
 public class PersonService implements ServicePlugin {
 
-	@PluginInfo(version = 1)
+	
 	@Autowired
 	private PersonRepository repository;
 
@@ -33,15 +33,15 @@ public class PersonService implements ServicePlugin {
 
 
 	public Person createPerson(PersonCreate personCreate,
-			SecurityContext securityContext) {
-		Person person = createPersonNoMerge(personCreate, securityContext);
+			SecurityContextBase securityContextBase) {
+		Person person = createPersonNoMerge(personCreate, securityContextBase);
 		repository.merge(person);
 		return person;
 	}
 
 	public Person createPersonNoMerge(PersonCreate personCreate,
-			SecurityContext securityContext) {
-		Person person = new Person(personCreate.getFirstName(), securityContext);
+			SecurityContextBase securityContextBase) {
+		Person person = new Person(personCreate.getFirstName(), securityContextBase);
 		updatePersonNoMerge(person, personCreate);
 		return person;
 	}
@@ -64,7 +64,7 @@ public class PersonService implements ServicePlugin {
 	}
 
 	public Person updatePerson(PersonUpdate personUpdate,
-			SecurityContext securityContext) {
+			SecurityContextBase securityContextBase) {
 		Person person = personUpdate.getPerson();
 		if (updatePersonNoMerge(person, personUpdate)) {
 			repository.merge(person);
@@ -73,20 +73,20 @@ public class PersonService implements ServicePlugin {
 	}
 
 	public <T extends Baseclass> T getByIdOrNull(String id, Class<T> c,
-			List<String> batchString, SecurityContext securityContext) {
-		return repository.getByIdOrNull(id, c, batchString, securityContext);
+			List<String> batchString, SecurityContextBase securityContextBase) {
+		return repository.getByIdOrNull(id, c, batchString, securityContextBase);
 	}
 
 	public PaginationResponse<Person> getAllPersons(PersonFilter personFilter,
-			SecurityContext securityContext) {
-		List<Person> list = listAllPersons(personFilter, securityContext);
-		long count = repository.countAllPersons(personFilter, securityContext);
+			SecurityContextBase securityContextBase) {
+		List<Person> list = listAllPersons(personFilter, securityContextBase);
+		long count = repository.countAllPersons(personFilter, securityContextBase);
 		return new PaginationResponse<>(list, personFilter, count);
 	}
 
 	public List<Person> listAllPersons(PersonFilter personFilter,
-			SecurityContext securityContext) {
-		return repository.listAllPersons(personFilter, securityContext);
+			SecurityContextBase securityContextBase) {
+		return repository.listAllPersons(personFilter, securityContextBase);
 	}
 
 }

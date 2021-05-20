@@ -12,7 +12,7 @@ import com.flexicore.examples.service.PersonService;
 
 import com.flexicore.interfaces.RESTService;
 import com.flexicore.interfaces.RestServicePlugin;
-import com.flexicore.security.SecurityContext;
+import com.flexicore.security.SecurityContextBase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Created by Asaf on 04/06/2017.
  */
-@PluginInfo(version = 1)
+
 @OperationsInside
 @ProtectedREST
 @Path("plugins/Person")
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Primary
 public class PersonRESTService implements RestServicePlugin {
 
-	@PluginInfo(version = 1)
+	
 	@Autowired
 	private PersonService service;
 
@@ -49,8 +49,8 @@ public class PersonRESTService implements RestServicePlugin {
 	@Operation(summary = "createPerson", description = "Creates Person")
 	public Person createPerson(
 			@HeaderParam("authenticationKey") String authenticationKey,
-			PersonCreate personCreate, @Context SecurityContext securityContext) {
-		return service.createPerson(personCreate, securityContext);
+			PersonCreate personCreate, @Context SecurityContextBase securityContextBase) {
+		return service.createPerson(personCreate, securityContextBase);
 	}
 
 	@PUT
@@ -58,15 +58,15 @@ public class PersonRESTService implements RestServicePlugin {
 	@Path("updatePerson")
 	public Person updatePerson(
 			@HeaderParam("authenticationKey") String authenticationKey,
-			PersonUpdate personUpdate, @Context SecurityContext securityContext) {
+			PersonUpdate personUpdate, @Context SecurityContextBase securityContextBase) {
 		String personId = personUpdate.getId();
 		Person person = personId != null ? service.getByIdOrNull(personId,
-				Person.class, null, securityContext) : null;
+				Person.class, null, securityContextBase) : null;
 		if (person == null) {
 			throw new BadRequestException("No Person with id " + personId);
 		}
 		personUpdate.setPerson(person);
-		return service.updatePerson(personUpdate, securityContext);
+		return service.updatePerson(personUpdate, securityContextBase);
 	}
 
 	@POST
@@ -74,7 +74,7 @@ public class PersonRESTService implements RestServicePlugin {
 	@Path("getAllPersons")
 	public PaginationResponse<Person> getAllPersons(
 			@HeaderParam("authenticationKey") String authenticationKey,
-			PersonFilter personFilter, @Context SecurityContext securityContext) {
-		return service.getAllPersons(personFilter, securityContext);
+			PersonFilter personFilter, @Context SecurityContextBase securityContextBase) {
+		return service.getAllPersons(personFilter, securityContextBase);
 	}
 }
