@@ -1,13 +1,13 @@
 package com.flexicore.example.person;
 
 import com.flexicore.model.Baseclass;
-import com.flexicore.security.SecurityContext;
+import com.flexicore.security.SecurityContextBase;
 
 import javax.persistence.Entity;
 
 @Entity
 public class Person extends Baseclass {
-    public Person(String name, SecurityContext securityContext) {
+    public Person(String name, SecurityContextBase securityContext) {
         super(name, securityContext);
     }
 
