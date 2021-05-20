@@ -2,7 +2,7 @@ package com.flexicore.example.library.model;
 
 import com.flexicore.example.person.Person;
 import com.flexicore.model.Baseclass;
-import com.flexicore.security.SecurityContext;
+import com.flexicore.security.SecurityContextBase;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,8 +19,8 @@ public class Subscription extends Baseclass {
     public Subscription() {
     }
 
-    public Subscription(String name, SecurityContext securityContext) {
-        super(name, securityContext);
+    public Subscription(String name, SecurityContextBase securityContextBase) {
+        super(name, securityContextBase);
     }
 
     @ManyToOne(targetEntity = Book.class)
