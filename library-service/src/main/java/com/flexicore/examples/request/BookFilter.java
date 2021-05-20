@@ -2,13 +2,13 @@ package com.flexicore.examples.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.example.library.model.Author;
-import com.flexicore.model.FilteringInformationHolder;
+import com.wizzdi.flexicore.security.request.PaginationFilter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BookFilter extends FilteringInformationHolder {
+public class BookFilter extends PaginationFilter {
 
 	private Set<String> authorIds = new HashSet<>();
 	@JsonIgnore

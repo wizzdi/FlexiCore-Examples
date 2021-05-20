@@ -3,12 +3,12 @@ package com.flexicore.examples.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.example.library.model.Book;
 import com.flexicore.example.person.Person;
+import com.wizzdi.flexicore.security.request.BasicCreate;
 
 import java.time.OffsetDateTime;
 
-public class SubscriptionCreate {
+public class SubscriptionCreate extends BasicCreate {
 
-	private String description;
 	private OffsetDateTime startTime;
 	private OffsetDateTime endTime;
 	private String bookId;
@@ -18,14 +18,6 @@ public class SubscriptionCreate {
 	@JsonIgnore
 	private Person person;
 
-	public String getDescription() {
-		return description;
-	}
-
-	public <T extends SubscriptionCreate> T setDescription(String description) {
-		this.description = description;
-		return (T) this;
-	}
 
 	public OffsetDateTime getStartTime() {
 		return startTime;
