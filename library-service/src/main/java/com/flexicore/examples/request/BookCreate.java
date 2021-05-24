@@ -2,31 +2,13 @@ package com.flexicore.examples.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.example.library.model.Author;
+import com.wizzdi.flexicore.security.request.BasicCreate;
 
-public class BookCreate {
-	private String name;
-	private String description;
+public class BookCreate extends BasicCreate {
+
 	private String authorId;
 	@JsonIgnore
 	private Author author;
-
-	public String getName() {
-		return name;
-	}
-
-	public <T extends BookCreate> T setName(String name) {
-		this.name = name;
-		return (T) this;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public <T extends BookCreate> T setDescription(String description) {
-		this.description = description;
-		return (T) this;
-	}
 
 	public String getAuthorId() {
 		return authorId;

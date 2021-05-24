@@ -1,120 +1,156 @@
 package com.flexicore.examples.service;
 
-import com.flexicore.annotations.plugins.PluginInfo;
-import com.flexicore.data.jsoncontainers.PaginationResponse;
 import com.flexicore.example.library.model.Author;
+import com.flexicore.example.library.model.Author_;
 import com.flexicore.example.library.model.Book;
 import com.flexicore.examples.data.BookRepository;
 import com.flexicore.examples.request.BookCreate;
 import com.flexicore.examples.request.BookFilter;
 import com.flexicore.examples.request.BookUpdate;
-import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
-import com.flexicore.security.SecurityContext;
-
-import javax.ws.rs.BadRequestException;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import com.flexicore.model.Basic;
+import com.flexicore.security.SecurityContextBase;
+import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
+import com.wizzdi.flexicore.security.response.PaginationResponse;
+import com.wizzdi.flexicore.security.service.BaseclassService;
+import com.wizzdi.flexicore.security.service.BasicService;
 import org.pf4j.Extension;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-@PluginInfo(version = 1)
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.*;
+import java.util.stream.Collectors;
+
+
 @Extension
 @Component
-public class BookService implements ServicePlugin {
+public class BookService implements Plugin {
 
-	@PluginInfo(version = 1)
-	@Autowired
-	private BookRepository repository;
 
-	public Book createBook(BookCreate bookCreate,
-			SecurityContext securityContext) {
-		Book book = createBookNoMerge(bookCreate, securityContext);
-		repository.merge(book);
-		return book;
-	}
+    @Autowired
+    private BookRepository repository;
+    @Autowired
+    private BasicService basicService;
 
-	public Book createBookNoMerge(BookCreate bookCreate,
-			SecurityContext securityContext) {
-		Book book = new Book(bookCreate.getName(),securityContext);
-		updateBookNoMerge(book, bookCreate);
-		return book;
-	}
+    public Book createBook(BookCreate bookCreate,
+                           SecurityContextBase securityContext) {
+        Book book = createBookNoMerge(bookCreate, securityContext);
+        repository.merge(book);
+        return book;
+    }
 
-	public boolean updateBookNoMerge(Book book, BookCreate bookCreate) {
-		boolean update = false;
-		if (bookCreate.getName() != null
-				&& !bookCreate.getName().equals(book.getName())) {
-			book.setName(bookCreate.getName());
-			update = true;
-		}
+    public Book createBookNoMerge(BookCreate bookCreate,
+                                  SecurityContextBase securityContext) {
+        Book book = new Book();
+        book.setId(UUID.randomUUID().toString());
+        updateBookNoMerge(book, bookCreate);
+        BaseclassService.createSecurityObjectNoMerge(book, securityContext);
+        return book;
+    }
 
-		if (bookCreate.getDescription() != null
-				&& !bookCreate.getDescription().equals(book.getDescription())) {
-			book.setDescription(bookCreate.getDescription());
-			update = true;
-		}
+    public boolean updateBookNoMerge(Book book, BookCreate bookCreate) {
+        boolean update = basicService.updateBasicNoMerge(bookCreate, book);
+        if (bookCreate.getAuthor() != null && (book.getAuthor() == null || !bookCreate.getAuthor().getId().equals(book.getAuthor().getId()))) {
+            book.setAuthor(bookCreate.getAuthor());
+            update = true;
+        }
 
-		if (bookCreate.getAuthor() != null
-				&& (book.getAuthor() == null || !bookCreate.getAuthor().getId()
-						.equals(book.getAuthor().getId()))) {
-			book.setAuthor(bookCreate.getAuthor());
-			update = true;
-		}
+        return update;
+    }
 
-		return update;
-	}
+    public Book updateBook(BookUpdate bookUpdate,
+                           SecurityContextBase securityContext) {
+        Book book = bookUpdate.getBook();
+        if (updateBookNoMerge(book, bookUpdate)) {
+            repository.merge(book);
+        }
+        return book;
+    }
 
-	public Book updateBook(BookUpdate bookUpdate,
-			SecurityContext securityContext) {
-		Book book = bookUpdate.getBook();
-		if (updateBookNoMerge(book, bookUpdate)) {
-			repository.merge(book);
-		}
-		return book;
-	}
+    public PaginationResponse<Book> getAllBooks(BookFilter bookFilter,
+                                                SecurityContextBase securityContext) {
+        List<Book> list = listAllBooks(bookFilter, securityContext);
+        long count = repository.countAllBooks(bookFilter, securityContext);
+        return new PaginationResponse<>(list, bookFilter, count);
+    }
 
-	public <T extends Baseclass> T getByIdOrNull(String id, Class<T> c,
-			List<String> batchString, SecurityContext securityContext) {
-		return repository.getByIdOrNull(id, c, batchString, securityContext);
-	}
+    public List<Book> listAllBooks(BookFilter bookFilter,
+                                   SecurityContextBase securityContext) {
+        return repository.listAllBooks(bookFilter, securityContext);
+    }
 
-	public PaginationResponse<Book> getAllBooks(BookFilter bookFilter,
-			SecurityContext securityContext) {
-		List<Book> list = listAllBooks(bookFilter, securityContext);
-		long count = repository.countAllBooks(bookFilter, securityContext);
-		return new PaginationResponse<>(list, bookFilter, count);
-	}
+    public void validateCreate(BookFilter bookFilter, SecurityContextBase securityContext) {
+        Set<String> authorIds = bookFilter.getAuthorIds();
+        Map<String, Author> authorMap = authorIds.isEmpty()
+                ? new HashMap<>()
+                : repository
+                .listByIds(Author.class, authorIds, Author_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+        authorIds.removeAll(authorMap.keySet());
+        if (!authorIds.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Authors with ids " + authorIds);
+        }
+        bookFilter.setAuthors(new ArrayList<>(authorMap.values()));
+    }
 
-	public List<Book> listAllBooks(BookFilter bookFilter,
-			SecurityContext securityContext) {
-		return repository.listAllBooks(bookFilter, securityContext);
-	}
+    public void validateCreate(BookCreate bookCreate, SecurityContextBase securityContext) {
+        validate(bookCreate, securityContext);
+	    if(bookCreate.getAuthor()==null){
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"no author provided");
+        }
+    }
 
-	public void validate(BookFilter bookFilter, SecurityContext securityContext) {
-		Set<String> authorIds = bookFilter.getAuthorIds();
-		Map<String, Author> authorMap = authorIds.isEmpty()
-				? new HashMap<>()
-				: repository
-						.listByIds(Author.class, authorIds, securityContext)
-						.parallelStream()
-						.collect(Collectors.toMap(f -> f.getId(), f -> f));
-		authorIds.removeAll(authorMap.keySet());
-		if (!authorIds.isEmpty()) {
-			throw new BadRequestException("No Authors with ids " + authorIds);
-		}
-		bookFilter.setAuthors(new ArrayList<>(authorMap.values()));
-	}
+    public void validate(BookCreate bookCreate, SecurityContextBase securityContext) {
+        String authorId = bookCreate.getAuthorId();
+        Author author = authorId != null ? repository.getByIdOrNull(authorId,
+                Author.class, Author_.security, securityContext) : null;
+        if (author == null && authorId != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Author with id " + authorId);
+        }
+        bookCreate.setAuthor(author);
+    }
 
-	public void validate(BookCreate bookCreate, SecurityContext securityContext) {
-		String authorId = bookCreate.getAuthorId();
-		Author author = authorId != null ? getByIdOrNull(authorId,
-				Author.class, null, securityContext) : null;
-		if (author == null) {
-			throw new BadRequestException("No Author with id " + authorId);
-		}
-		bookCreate.setAuthor(author);
-	}
+
+    public <T extends Baseclass> List<T> listByIds(Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
+        return repository.listByIds(c, ids, securityContext);
+    }
+
+    public <T extends Baseclass> T getByIdOrNull(String id, Class<T> c, SecurityContextBase securityContext) {
+        return repository.getByIdOrNull(id, c, securityContext);
+    }
+
+    public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(String id, Class<T> c, SingularAttribute<D, E> baseclassAttribute, SecurityContextBase securityContext) {
+        return repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
+    }
+
+    public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(Class<T> c, Set<String> ids, SingularAttribute<D, E> baseclassAttribute, SecurityContextBase securityContext) {
+        return repository.listByIds(c, ids, baseclassAttribute, securityContext);
+    }
+
+    public <D extends Basic, T extends D> List<T> findByIds(Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
+        return repository.findByIds(c, ids, idAttribute);
+    }
+
+    public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
+        return repository.findByIds(c, requested);
+    }
+
+    public <T> T findByIdOrNull(Class<T> type, String id) {
+        return repository.findByIdOrNull(type, id);
+    }
+
+    @Transactional
+    public void merge(Object base) {
+        repository.merge(base);
+    }
+
+    @Transactional
+    public void massMerge(List<?> toMerge) {
+        repository.massMerge(toMerge);
+    }
 }

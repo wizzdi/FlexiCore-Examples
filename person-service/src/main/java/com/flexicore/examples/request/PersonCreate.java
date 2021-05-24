@@ -1,8 +1,8 @@
 package com.flexicore.examples.request;
 
-import com.flexicore.request.BaseclassCreate;
+import com.wizzdi.flexicore.security.request.BasicCreate;
 
-public class PersonCreate extends BaseclassCreate {
+public class PersonCreate extends BasicCreate {
 	private String firstName;
 	private String lastName;
 
@@ -24,8 +24,4 @@ public class PersonCreate extends BaseclassCreate {
 		return (T) this;
 	}
 
-	@Override
-	public boolean supportingDynamic() {
-		return super.supportingDynamic();
-	}
 }

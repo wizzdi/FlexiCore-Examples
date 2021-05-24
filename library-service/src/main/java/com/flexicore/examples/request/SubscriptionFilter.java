@@ -3,14 +3,13 @@ package com.flexicore.examples.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.example.library.model.Book;
 import com.flexicore.example.person.Person;
-import com.flexicore.model.FilteringInformationHolder;
+import com.wizzdi.flexicore.security.request.PaginationFilter;
 
-import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SubscriptionFilter extends FilteringInformationHolder {
+public class SubscriptionFilter extends PaginationFilter {
 
 	private Set<String> bookIds = new HashSet<>();
 	@JsonIgnore
